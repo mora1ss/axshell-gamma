@@ -1,4 +1,4 @@
-# serpantinum-gamma from the binary of the latest GitHub release, which installs in seconds.
+# axshell-gamma from the binary of the latest GitHub release, which installs in seconds.
 # release.json names that release; the release workflow updates it on master after each one.
 { pkgs, lib ? pkgs.lib }:
 
@@ -6,11 +6,11 @@ let
   release = lib.importJSON ./release.json;
 in
 pkgs.stdenv.mkDerivation {
-  pname = "serpantinum-gamma";
+  pname = "axshell-gamma";
   inherit (release) version;
 
   src = pkgs.fetchurl {
-    url = "https://github.com/ilyamiro/serpantinum-gamma/releases/download/v${release.version}/serpantinum-gamma-${release.version}-x86_64-linux.tar.gz";
+    url = "https://github.com/mora1ss/axshell-gamma/releases/download/v${release.version}/axshell-gamma-${release.version}-x86_64-linux.tar.gz";
     inherit (release) hash;
   };
 
@@ -28,15 +28,15 @@ pkgs.stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out
     cp -r bin share $out/
-    substituteInPlace $out/share/dbus-1/services/org.serpantinum.Gamma.service --replace-fail /usr/bin $out/bin
+    substituteInPlace $out/share/dbus-1/services/org.axshell.Gamma.service --replace-fail /usr/bin $out/bin
     runHook postInstall
   '';
 
   meta = {
     description = "Display temperature, brightness and gamma over D-Bus on Wayland";
-    homepage = "https://github.com/ilyamiro/serpantinum-gamma";
+    homepage = "https://github.com/mora1ss/axshell-gamma";
     license = lib.licenses.agpl3Plus;
-    mainProgram = "serpantinum-gamma";
+    mainProgram = "axshell-gamma";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

@@ -1,5 +1,5 @@
 # Usage in configuration.nix:
-#   environment.systemPackages = [ (pkgs.callPackage /path/to/serpantinum-gamma { }) ];
+#   environment.systemPackages = [ (pkgs.callPackage /path/to/axshell-gamma { }) ];
 #   services.dbus.packages = [ that same package ];   # lets D-Bus start it on first use
 #
 # By default this is the binary of the latest release (nix/release.json, written by the release

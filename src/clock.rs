@@ -66,7 +66,7 @@ mod tests {
     #[test]
     fn days_follow_daylight_saving_time() {
         // The time zone belongs to the whole process, so the check runs in a child with its own
-        const CHILD: &str = "SERPANTINUM_GAMMA_TZ_CHILD";
+        const CHILD: &str = "AXSHELL_GAMMA_TZ_CHILD";
         if std::env::var_os(CHILD).is_some() {
             // New York: 23 hours when daylight saving time starts, 25 when it ends
             assert_eq!(local_day(1772985600), (1772946000, 1773028800));

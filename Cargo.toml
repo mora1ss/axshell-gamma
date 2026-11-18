@@ -1,10 +1,10 @@
 [package]
-name = "serpantinum-gamma"
-version = "0.7.0"
+name = "axshell-gamma"
+version = "0.7.1"
 edition = "2024"
 description = "Display temperature, brightness and gamma over D-Bus on Wayland"
 license = "AGPL-3.0-or-later"
-repository = "https://github.com/ilyamiro/serpantinum-gamma"
+repository = "https://github.com/mora1ss/axshell-gamma"
 
 [dependencies]
 calloop = "0.14"

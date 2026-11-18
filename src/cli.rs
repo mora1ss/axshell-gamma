@@ -18,9 +18,9 @@ use crate::dbus::{BUS_NAME, INTERFACE, SCHEDULE_INTERFACE};
 use crate::model::object_path;
 
 pub const USAGE: &str = "\
-Usage: serpantinum-gamma [COMMAND]
+Usage: axshell-gamma [COMMAND]
 
-Without a command, runs the daemon in the foreground. It serves org.serpantinum.Gamma on the
+Without a command, runs the daemon in the foreground. It serves org.axshell.Gamma on the
 session bus, and the commands below use it.
 
 Commands:
@@ -80,11 +80,11 @@ pub fn run(args: &[String]) -> ExitCode {
     match command(args) {
         Ok(()) => ExitCode::SUCCESS,
         Err(Error::Usage(message)) => {
-            eprintln!("serpantinum-gamma: {message}\n\n{USAGE}");
+            eprintln!("axshell-gamma: {message}\n\n{USAGE}");
             ExitCode::from(2)
         }
         Err(Error::Failed(message)) => {
-            eprintln!("serpantinum-gamma: {message}");
+            eprintln!("axshell-gamma: {message}");
             ExitCode::FAILURE
         }
         Err(Error::Quiet) => ExitCode::FAILURE,
@@ -208,7 +208,7 @@ fn daemon() -> Result<Connection> {
     if running(&conn)? {
         Ok(conn)
     } else {
-        Err(failed("the daemon is not running; start it with serpantinum-gamma start"))
+        Err(failed("the daemon is not running; start it with axshell-gamma start"))
     }
 }
 
@@ -264,7 +264,7 @@ fn start(parsed: &Parsed) -> Result<()> {
         if let Ok(Some(status)) = child.try_wait()
             && !status.success()
         {
-            return Err(failed("the daemon could not start; run serpantinum-gamma in a terminal to see why"));
+            return Err(failed("the daemon could not start; run axshell-gamma in a terminal to see why"));
         }
         sleep(POLL);
     }

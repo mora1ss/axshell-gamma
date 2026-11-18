@@ -1,4 +1,4 @@
-# serpantinum-gamma
+# axshell-gamma
 
 A small daemon that sets display colour temperature, brightness, gamma and inversion on Wayland,
 with a day and night schedule that follows the sun. The same binary is its command line client. It uses the `wlr-gamma-control-unstable-v1` protocol, supported by
@@ -12,24 +12,24 @@ The binary links only glibc.
 ## Usage
 
 ```sh
-serpantinum-gamma start                                   # the daemon, in the background
-serpantinum-gamma set --temperature 4000                  # every output
-serpantinum-gamma set -o eDP-1 --brightness 0.8           # one output
-serpantinum-gamma auto on --night 3500                    # follow the schedule
-serpantinum-gamma location 55.75 37.62                    # by the sun at this place
-serpantinum-gamma fallback 06:30 19:00                    # or, without a location, by the clock
-serpantinum-gamma status -o eDP-1
-serpantinum-gamma reset
-serpantinum-gamma quit                                    # the compositor restores normal colours
+axshell-gamma start                                   # the daemon, in the background
+axshell-gamma set --temperature 4000                  # every output
+axshell-gamma set -o eDP-1 --brightness 0.8           # one output
+axshell-gamma auto on --night 3500                    # follow the schedule
+axshell-gamma location 55.75 37.62                    # by the sun at this place
+axshell-gamma fallback 06:30 19:00                    # or, without a location, by the clock
+axshell-gamma status -o eDP-1
+axshell-gamma reset
+axshell-gamma quit                                    # the compositor restores normal colours
 ```
 
-`serpantinum-gamma --help` lists every command. Without `-o`, a command changes every output,
+`axshell-gamma --help` lists every command. Without `-o`, a command changes every output,
 including outputs connected later. A command for an output that was just connected waits up to
 two seconds for it to appear. Commands never start the daemon themselves, except `start`.
 
 The daemon keeps its colours only while it runs, since the compositor restores normal colours
 when a program's gamma control goes away. It can also run in the foreground, as plain
-`serpantinum-gamma`.
+`axshell-gamma`.
 
 ## D-Bus
 
@@ -37,14 +37,14 @@ The client talks to the daemon over the session bus, which any other program can
 systemd is needed, only a session bus.
 
 ```sh
-busctl --user set-property org.serpantinum.Gamma / org.serpantinum.Gamma Temperature q 4000
-busctl --user -- call org.serpantinum.Gamma / org.serpantinum.Gamma UpdateTemperature n -100
-busctl --user set-property org.serpantinum.Gamma /outputs/eDP_1 org.serpantinum.Gamma Brightness d 0.8
-busctl --user call org.serpantinum.Gamma / org.serpantinum.Gamma ToggleInverted
-busctl --user tree org.serpantinum.Gamma
+busctl --user set-property org.axshell.Gamma / org.axshell.Gamma Temperature q 4000
+busctl --user -- call org.axshell.Gamma / org.axshell.Gamma UpdateTemperature n -100
+busctl --user set-property org.axshell.Gamma /outputs/eDP_1 org.axshell.Gamma Brightness d 0.8
+busctl --user call org.axshell.Gamma / org.axshell.Gamma ToggleInverted
+busctl --user tree org.axshell.Gamma
 ```
 
-The bus name and the interface are both `org.serpantinum.Gamma`. `/` controls every output, and
+The bus name and the interface are both `org.axshell.Gamma`. `/` controls every output, and
 `/outputs/<name>` controls one.
 
 | Member | Type | Range |
@@ -66,19 +66,19 @@ The bus name and the interface are both `org.serpantinum.Gamma`. `/` controls ev
 - `ToggleInverted` on `/` returns every output to normal if all are inverted, and otherwise inverts
   them all.
 - All properties emit `PropertiesChanged`, on the object that changed and on `/` when the average moves.
-  Use `busctl --user monitor org.serpantinum.Gamma` to watch them.
+  Use `busctl --user monitor org.axshell.Gamma` to watch them.
 
 ## Day and night schedule
 
-The `org.serpantinum.Gamma.Schedule` interface changes the temperature with the time of day. Like
+The `org.axshell.Gamma.Schedule` interface changes the temperature with the time of day. Like
 the colour, it is on `/` for every output and on `/outputs/<name>` for one. The daemon keeps no
 settings and finds no location itself: whatever starts it sets them, and they last until it exits.
 
 ```sh
-busctl --user call org.serpantinum.Gamma / org.serpantinum.Gamma.Schedule SetLocation dd 55.75 37.62
-busctl --user set-property org.serpantinum.Gamma / org.serpantinum.Gamma.Schedule NightTemperature q 3500
-busctl --user set-property org.serpantinum.Gamma / org.serpantinum.Gamma.Schedule Auto b true
-busctl --user set-property org.serpantinum.Gamma /outputs/HDMI_A_1 org.serpantinum.Gamma.Schedule Auto b false
+busctl --user call org.axshell.Gamma / org.axshell.Gamma.Schedule SetLocation dd 55.75 37.62
+busctl --user set-property org.axshell.Gamma / org.axshell.Gamma.Schedule NightTemperature q 3500
+busctl --user set-property org.axshell.Gamma / org.axshell.Gamma.Schedule Auto b true
+busctl --user set-property org.axshell.Gamma /outputs/HDMI_A_1 org.axshell.Gamma.Schedule Auto b false
 ```
 
 | Member | Type | Meaning |
@@ -124,8 +124,8 @@ The colour for each temperature is computed from physics, not a curve fit:
 
 ## Starting it through D-Bus
 
-The package installs `share/dbus-1/services/org.serpantinum.Gamma.service`, so the first call to
-`org.serpantinum.Gamma` starts the daemon. A process D-Bus starts gets D-Bus's own environment, so
+The package installs `share/dbus-1/services/org.axshell.Gamma.service`, so the first call to
+`org.axshell.Gamma` starts the daemon. A process D-Bus starts gets D-Bus's own environment, so
 `WAYLAND_DISPLAY` must be in it. Most compositor setups already run
 `dbus-update-activation-environment --systemd WAYLAND_DISPLAY`. If yours doesn't, start the daemon
 from the compositor's autostart instead.
@@ -135,17 +135,17 @@ tool first, or the compositor refuses the daemon's control and it logs a message
 
 ## Installing
 
-Each [release](https://github.com/ilyamiro/serpantinum-gamma/releases) has an x86_64 tarball laid out
+Each [release](https://github.com/mora1ss/axshell-gamma/releases) has an x86_64 tarball laid out
 under `usr/`, plus a `SHA256SUMS` file:
 
 ```sh
-tar -xzf serpantinum-gamma-*-x86_64-linux.tar.gz -C / --no-same-owner   # as root
+tar -xzf axshell-gamma-*-x86_64-linux.tar.gz -C / --no-same-owner   # as root
 ```
 
 On NixOS:
 
 ```nix
-let gamma = pkgs.callPackage /path/to/serpantinum-gamma { }; in {
+let gamma = pkgs.callPackage /path/to/axshell-gamma { }; in {
   environment.systemPackages = [ gamma ];
   services.dbus.packages = [ gamma ];
 }

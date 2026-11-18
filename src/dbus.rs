@@ -10,9 +10,9 @@ use crate::color::{Color, TEMP_MAX, TEMP_MIN};
 use crate::model::{Model, Target};
 use crate::schedule::{Location, MINUTES_PER_DAY, Plan, View};
 
-pub const BUS_NAME: &str = "org.serpantinum.Gamma";
-pub const INTERFACE: &str = "org.serpantinum.Gamma";
-pub const SCHEDULE_INTERFACE: &str = "org.serpantinum.Gamma.Schedule";
+pub const BUS_NAME: &str = "org.axshell.Gamma";
+pub const INTERFACE: &str = "org.axshell.Gamma";
+pub const SCHEDULE_INTERFACE: &str = "org.axshell.Gamma.Schedule";
 const PROPERTIES_INTERFACE: &str = "org.freedesktop.DBus.Properties";
 
 pub type Shared = Arc<Mutex<Model>>;
@@ -88,7 +88,7 @@ fn properties_changed(
 
 fn report(path: &str, sent: zbus::Result<()>) {
     if let Err(error) = sent {
-        eprintln!("serpantinum-gamma: could not signal a change on {path}: {error}");
+        eprintln!("axshell-gamma: could not signal a change on {path}: {error}");
     }
 }
 
@@ -133,7 +133,7 @@ pub fn unserve(bus: &zbus::blocking::Connection, path: &str) -> zbus::Result<()>
     Ok(())
 }
 
-/// The `org.serpantinum.Gamma` interface on `/` or on one `/outputs/<name>`
+/// The `org.axshell.Gamma` interface on `/` or on one `/outputs/<name>`
 pub struct Relay {
     handle: Handle,
 }
@@ -160,7 +160,7 @@ impl Relay {
     }
 }
 
-#[interface(name = "org.serpantinum.Gamma")]
+#[interface(name = "org.axshell.Gamma")]
 impl Relay {
     async fn toggle_inverted(&self) {
         self.change(false, |model, target| model.toggle_inverted(target)).await;
@@ -226,7 +226,7 @@ impl Relay {
     }
 }
 
-/// The `org.serpantinum.Gamma.Schedule` interface on `/` or on one `/outputs/<name>`. Auto and the
+/// The `org.axshell.Gamma.Schedule` interface on `/` or on one `/outputs/<name>`. Auto and the
 /// temperatures belong to the object, like the colour; the location and the fallback times are
 /// shared by every object.
 pub struct ScheduleRelay {
@@ -261,7 +261,7 @@ fn minutes_of_day(value: u16) -> fdo::Result<u16> {
     }
 }
 
-#[interface(name = "org.serpantinum.Gamma.Schedule")]
+#[interface(name = "org.axshell.Gamma.Schedule")]
 impl ScheduleRelay {
     async fn set_location(&self, latitude: f64, longitude: f64) -> fdo::Result<()> {
         let location = Location::new(latitude, longitude).ok_or_else(|| {

@@ -103,7 +103,7 @@ impl Daemon {
 
     fn bind_output(&mut self, registry: &WlRegistry, id: u32, version: u32) {
         if version < OUTPUT_VERSION {
-            eprintln!("serpantinum-gamma: skipping an output whose wl_output version {version} has no name");
+            eprintln!("axshell-gamma: skipping an output whose wl_output version {version} has no name");
             return;
         }
         let output = registry.bind::<WlOutput, _, _>(id, OUTPUT_VERSION, &self.qh, id);
@@ -126,7 +126,7 @@ impl Daemon {
             self.wake.clone(),
         );
         if let Err(error) = dbus::serve(&self.bus, handle) {
-            eprintln!("serpantinum-gamma: could not serve {path}: {error}");
+            eprintln!("axshell-gamma: could not serve {path}: {error}");
         }
         self.reconcile();
     }
@@ -143,7 +143,7 @@ impl Daemon {
             lock(&self.model).outputs.remove(&id);
             let path = object_path(&name);
             if let Err(error) = dbus::unserve(&self.bus, &path) {
-                eprintln!("serpantinum-gamma: could not stop serving {path}: {error}");
+                eprintln!("axshell-gamma: could not stop serving {path}: {error}");
             }
         }
     }
@@ -202,14 +202,14 @@ impl Daemon {
             }
             match write_ramp(control, slot.size as usize, color) {
                 Ok(()) => slot.applied = Some(color),
-                Err(error) => eprintln!("serpantinum-gamma: could not send a gamma ramp: {error}"),
+                Err(error) => eprintln!("axshell-gamma: could not send a gamma ramp: {error}"),
             }
         }
     }
 }
 
 fn write_ramp(control: &ZwlrGammaControlV1, size: usize, color: Color) -> std::io::Result<()> {
-    let fd = memfd_create("serpantinum-gamma", MemfdFlags::CLOEXEC)?;
+    let fd = memfd_create("axshell-gamma", MemfdFlags::CLOEXEC)?;
     let mut file = File::from(fd);
     file.write_all(&ramp_bytes(size, color))?;
     file.seek(SeekFrom::Start(0))?;
@@ -273,7 +273,7 @@ impl Dispatch<HyprlandCtmControlManagerV1, ()> for Daemon {
         _: &QueueHandle<Self>,
     ) {
         let hyprland_ctm_control_manager_v1::Event::Blocked = event;
-        eprintln!("serpantinum-gamma: Hyprland ignores this program's colours; another program holds the CTM control");
+        eprintln!("axshell-gamma: Hyprland ignores this program's colours; another program holds the CTM control");
         // The compositor asks for the manager to be destroyed, and ignores it until then
         lock(&daemon.model).blocked = true;
         manager.destroy();
@@ -302,7 +302,7 @@ impl Dispatch<ZwlrGammaControlV1, u32> for Daemon {
             zwlr_gamma_control_v1::Event::Failed => {
                 let name = slot.name.as_deref().unwrap_or("an output");
                 eprintln!(
-                    "serpantinum-gamma: the compositor refused gamma control of {name}; another program may hold it"
+                    "axshell-gamma: the compositor refused gamma control of {name}; another program may hold it"
                 );
                 slot.failed = Some(Instant::now());
                 slot.size = 0;

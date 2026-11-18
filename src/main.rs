@@ -42,7 +42,7 @@ fn main() -> ExitCode {
             return ExitCode::SUCCESS;
         }
         Some("-V" | "--version") => {
-            println!("serpantinum-gamma {}", env!("CARGO_PKG_VERSION"));
+            println!("axshell-gamma {}", env!("CARGO_PKG_VERSION"));
             return ExitCode::SUCCESS;
         }
         Some(_) => return cli::run(&args),
@@ -50,11 +50,11 @@ fn main() -> ExitCode {
     match run() {
         Ok(Outcome::Served) => ExitCode::SUCCESS,
         Ok(Outcome::AlreadyRunning) => {
-            eprintln!("serpantinum-gamma: {BUS_NAME} is already served on this bus");
+            eprintln!("axshell-gamma: {BUS_NAME} is already served on this bus");
             ExitCode::SUCCESS
         }
         Err(error) => {
-            eprintln!("serpantinum-gamma: {error}");
+            eprintln!("axshell-gamma: {error}");
             ExitCode::FAILURE
         }
     }

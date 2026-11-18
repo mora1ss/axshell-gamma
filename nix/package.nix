@@ -1,8 +1,8 @@
-# serpantinum-gamma built from this checkout
+# axshell-gamma built from this checkout
 { pkgs, lib ? pkgs.lib }:
 
 pkgs.rustPlatform.buildRustPackage {
-  pname = "serpantinum-gamma";
+  pname = "axshell-gamma";
   version = (lib.importTOML ../Cargo.toml).package.version;
 
   src = lib.fileset.toSource {
@@ -12,15 +12,15 @@ pkgs.rustPlatform.buildRustPackage {
   cargoLock.lockFile = ../Cargo.lock;
 
   postInstall = ''
-    install -Dm644 assets/org.serpantinum.Gamma.service $out/share/dbus-1/services/org.serpantinum.Gamma.service
-    substituteInPlace $out/share/dbus-1/services/org.serpantinum.Gamma.service --replace-fail @out@ $out
+    install -Dm644 assets/org.axshell.Gamma.service $out/share/dbus-1/services/org.axshell.Gamma.service
+    substituteInPlace $out/share/dbus-1/services/org.axshell.Gamma.service --replace-fail @out@ $out
   '';
 
   meta = {
     description = "Display temperature, brightness and gamma over D-Bus on Wayland";
-    homepage = "https://github.com/ilyamiro/serpantinum-gamma";
+    homepage = "https://github.com/mora1ss/axshell-gamma";
     license = lib.licenses.agpl3Plus;
-    mainProgram = "serpantinum-gamma";
+    mainProgram = "axshell-gamma";
     platforms = lib.platforms.linux;
   };
 }
